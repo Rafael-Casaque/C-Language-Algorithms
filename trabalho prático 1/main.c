@@ -1,3 +1,9 @@
+//Importação de bibliotecas
+
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 //Definição de constantes
 
 #define TAMNOME 50
@@ -23,7 +29,11 @@ typedef struct registro {
 
 aluno alunos[1000]; 
 
-//definição de funções
+//Variáveis globais
+
+int contador = 0;
+
+//Criação das funções
 
 int menu(){
     int i;    
@@ -39,6 +49,45 @@ int menu(){
     return i;
 }
 
+void cadastro(){    
+    printf("Digite o nome do aluno: ");    
+    scanf("%s",&alunos[contador].nome);    
+    printf("Digite o sobrenome do aluno: ");    
+    scanf("%s",&alunos[contador].sobrenome);    
+    printf("Digite o prontuario do aluno: ");    
+    scanf("%d",&alunos[contador].prontuario);
+    printf("Digite o curso do aluno: ");    
+    scanf("%s",&alunos[contador].curso);
+    printf("Digite o dia de nascimento do aluno: ");    
+    scanf("%d",&alunos[contador].datadenascimento.dia);
+    printf("Digite o mes de nascimento do aluno: ");    
+    scanf("%d",&alunos[contador].datadenascimento.mes);
+    printf("Digite o ano de nascimento do aluno: ");    
+    scanf("%d",&alunos[contador].datadenascimento.ano);        
+    contador++;
+}
+
+void imprimir(){ 
+    int i,j,count=0;
+    if(contador==0)
+        printf("nao ha alunos cadastrados!");
+    else{
+        printf("Alunos cadastrados:\n\n");
+        for(i=0; i<contador; i++){            
+            for(j=0; j<TAMNOME; j++){
+                if(alunos[count].nome[j]==0){                    
+                    printf("\n");
+                    count++;
+                    break;                    
+                }
+                else{                  
+                    printf("%c",alunos[count].nome[j]);
+                }
+            }
+        }
+    }
+}
+
 int main() {
     int i;    
     while(i!=0){
@@ -48,12 +97,13 @@ int main() {
             case 0:
                 break;            
             case 1:
-                printf("cadastro\n\n");
-                system("pause");
+                cadastro();                
+                system("\n\npause");
                 system("cls");
                 break;
             case 2:
-                printf("exibir\n\n");
+                imprimir();                
+                printf("\n");
                 system("pause");
                 system("cls");
                 break;
