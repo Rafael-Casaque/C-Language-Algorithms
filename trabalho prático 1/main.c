@@ -67,68 +67,54 @@ void cadastro(){
     contador++;
 }
 
-void imprimir(){ 
-    int count=0;
+void imprimirString(char string[]){
     int i;
+    for(i=0; i<TAMNOME;i++){
+        if(string[i]==0){
+            break;
+        }
+        else{
+            printf("%c",string[i]);
+        }
+    }
+}
+
+void imprimirTodos(){
     if(contador==0){
-        printf("Nao ha alunos cadastrados");
+        printf("Nao ha alunos cadastrados!");
     }
     else{
-
-        //impressão do nome
-
+        int count = 0;
         while(count<contador){
-            printf("Nome: ");
-            for(i=0; i<TAMNOME; i++){
-                if(alunos[count].nome[i]==0){
-                    printf("\n");
-                    break;
-                }
-                else{
-                    printf("%c",alunos[count].nome[i]);
-                }
-            }
-
-        //impressão do sobrenome
-
-            printf("Sobrenome: ");
-            for(i=0; i<TAMSOBRENOME; i++){
-                if(alunos[count].sobrenome[i]==0){
-                    printf("\n");
-                    break;
-                }
-                else{
-                    printf("%c",alunos[count].sobrenome[i]);
-                }
-            }
-
-        //impressão da data de nascimento            
-
-            printf("Data de nascimento: ");
-            printf("%d/",alunos[count].datadenascimento.dia);
-            printf("%d/",alunos[count].datadenascimento.mes);
-            printf("%d\n",alunos[count].datadenascimento.ano);
-
-        //impressão do prontuário
-
-            printf("Prontuario: ");
-            printf("%d\n",alunos[count].prontuario);
-
-        //impressão do curso
-
-            printf("Curso: ");
-            for(i=0; i<4; i++){
-                if(alunos[count].curso[i]==0){
-                    printf("\n----------------------\n");
-                    break;
-                }
-                else{
-                    printf("%c",alunos[count].curso[i]);
-                }
-            }
-            
+            printf("\n----------------\n");
+            printf("\nNome: ");
+            imprimirString(alunos[count].nome);
+            printf("\nSobrenome: ");
+            imprimirString(alunos[count].sobrenome);
+            printf("\nProntuario: %d",alunos[count].prontuario);
+            printf("\nCurso: ");
+            imprimirString(alunos[count].curso);
+            printf("\nData de nascimento: %d/%d/%d",alunos[count].datadenascimento.dia,alunos[count].datadenascimento.mes,alunos[count].datadenascimento.ano);
             count++;
         }
+    }
+    
+    
+}
+
+void imprimirFiltrados(int TAMANHO, int filtrados[]){
+    int count = 0;
+    while(count < TAMANHO){
+        printf("\n----------------\n");
+            printf("\nNome: ");
+            imprimirString(alunos[filtrados[count]].nome);
+            printf("\nSobrenome: ");
+            imprimirString(alunos[filtrados[count]].sobrenome);
+            printf("\nProntuario: %d",alunos[filtrados[count]].prontuario);
+            printf("\nCurso: ");
+            imprimirString(alunos[filtrados[count]].curso);
+            printf("\nData de nascimento: %d/%d/%d",alunos[filtrados[count]].datadenascimento.dia,alunos[filtrados[count]].datadenascimento.mes,alunos[filtrados[count]].datadenascimento.ano);
+            count++;
     }
 }
 
@@ -148,11 +134,13 @@ int escolherFiltro(){
 }
 
 void filtragens(){
+    int filtrados[1000];
     char filtroNome[TAMNOME];
     char filtroSobrenome[TAMSOBRENOME];
     char filtroCurso[4];
     int filtroProntuario,filtroDia,filtroMes,filtroAno;
     int i = escolherFiltro();
+    int count;
     switch(i){
         case 1:            
             printf("Filtragem por nome e sobrenome");
@@ -160,68 +148,22 @@ void filtragens(){
             printf("\n\nDigite o nome: ");
             scanf("%s",&filtroNome);
             printf("Digite o sobrenome: ");
-            scanf("%s",&filtroSobrenome);
-            int i,count=0;
-            int j=0;
-            system("cls");
-            printf("Alunos encontrados com a filtragem inserida:\n");
+            scanf("%s",&filtroSobrenome);     
+            count = 0;
+            int i=0;
             while(count<contador){
                 if(strstr(alunos[count].nome,filtroNome)!=NULL && strstr(alunos[count].sobrenome,filtroSobrenome)!=NULL){
-                    printf("\n------------------------------\n");
-
-                    //impressão do nome                
-                    printf("Nome: ");
-                    for(i=0; i<TAMNOME; i++){
-                        if(alunos[count].nome[i]==0){
-                        printf("\n");
-                        break;
-                        }
-                        else{
-                            printf("%c",alunos[count].nome[i]);
-                        }
-                    }
-        
-                    //impressão do sobrenome
-                    printf("Sobrenome: ");
-                    for(i=0; i<TAMSOBRENOME; i++){
-                        if(alunos[count].sobrenome[i]==0){
-                        printf("\n");
-                        break;
-                        }
-                        else{
-                            printf("%c",alunos[count].sobrenome[i]);
-                        }
-                    }
-
-                    //impressão da data de nascimento            
-                        printf("Data de nascimento: ");
-                        printf("%d/",alunos[count].datadenascimento.dia);
-                        printf("%d/",alunos[count].datadenascimento.mes);
-                        printf("%d\n",alunos[count].datadenascimento.ano);
-
-                    //impressão do prontuário
-
-                        printf("Prontuario: ");
-                        printf("%d\n",alunos[count].prontuario);
-
-                    //impressão do curso
-
-                        printf("Curso: ");
-                        for(i=0; i<4; i++){
-                            if(alunos[count].curso[i]==0){                                
-                                break;
-                            }
-                            else{
-                                printf("%c",alunos[count].curso[i]);
-                            }
-                        }
-                    }
-                    else{
-                        j++;
-                    }
-                    count++;
+                    filtrados[i]=count;
+                    i++;                    
                 }
-                if(j==contador) printf("\nNenhum aluno foi econtrado com a busca especificada\n");
+                count++;
+            }
+            if(i==0){
+                printf("Nao foram encontrados resultados com a filtragem inserida");
+            }
+            else{
+                imprimirFiltrados(i,filtrados);
+            }            
 
         break;
 
@@ -229,204 +171,66 @@ void filtragens(){
             printf("Filtragem por nome");
             printf("\n------------------");
             printf("\n\nDigite o nome: ");
-            scanf("%s",&filtroNome);        
-            count=0;
-            j=0;
-            system("cls");
-            printf("Alunos encontrados com a filtragem inserida:\n");
+            scanf("%s",&filtroNome);                    
+            count = 0;
+            i=0;
             while(count<contador){
                 if(strstr(alunos[count].nome,filtroNome)!=NULL){
-                    printf("\n------------------------------\n");
-
-                    //impressão do nome                
-                    printf("Nome: ");
-                    for(i=0; i<TAMNOME; i++){
-                        if(alunos[count].nome[i]==0){
-                        printf("\n");
-                        break;
-                        }
-                        else{
-                            printf("%c",alunos[count].nome[i]);
-                        }
-                    }
-        
-                    //impressão do sobrenome
-                    printf("Sobrenome: ");
-                    for(i=0; i<TAMSOBRENOME; i++){
-                        if(alunos[count].sobrenome[i]==0){
-                        printf("\n");
-                        break;
-                        }
-                        else{
-                            printf("%c",alunos[count].sobrenome[i]);
-                        }
-                    }
-
-                    //impressão da data de nascimento            
-                        printf("Data de nascimento: ");
-                        printf("%d/",alunos[count].datadenascimento.dia);
-                        printf("%d/",alunos[count].datadenascimento.mes);
-                        printf("%d\n",alunos[count].datadenascimento.ano);
-
-                    //impressão do prontuário
-
-                        printf("Prontuario: ");
-                        printf("%d\n",alunos[count].prontuario);
-
-                    //impressão do curso
-
-                        printf("Curso: ");
-                        for(i=0; i<4; i++){
-                            if(alunos[count].curso[i]==0){                                
-                                break;
-                            }
-                            else{
-                                printf("%c",alunos[count].curso[i]);
-                            }
-                        }
-                    }
-                    else{
-                        j++;
-                    }
-                    count++;
+                    filtrados[i]=count;
+                    i++;                    
                 }
-                if(j==contador) printf("\nNenhum aluno foi econtrado com a busca especificada\n");    
+                count++;
+            }
+            if(i==0){
+                printf("Nao foram encontrados resultados com a filtragem inserida");
+            }
+            else{
+                imprimirFiltrados(i,filtrados);
+            }
         break;
 
         case 3:
             printf("Filtragem por sobrenome");
             printf("\n-----------------------");
             printf("\n\nDigite o sobrenome: ");
-            scanf("%s",&filtroSobrenome);
-            count=0;
-            j=0;
-            system("cls");
-            printf("Alunos encontrados com a filtragem inserida:\n");
+            scanf("%s",&filtroSobrenome);            
+            count = 0;
+            i=0;
             while(count<contador){
                 if(strstr(alunos[count].sobrenome,filtroSobrenome)!=NULL){
-                    printf("\n------------------------------\n");
-
-                    //impressão do nome                
-                    printf("Nome: ");
-                    for(i=0; i<TAMNOME; i++){
-                        if(alunos[count].nome[i]==0){
-                        printf("\n");
-                        break;
-                        }
-                        else{
-                            printf("%c",alunos[count].nome[i]);
-                        }
-                    }
-        
-                    //impressão do sobrenome
-                    printf("Sobrenome: ");
-                    for(i=0; i<TAMSOBRENOME; i++){
-                        if(alunos[count].sobrenome[i]==0){
-                        printf("\n");
-                        break;
-                        }
-                        else{
-                            printf("%c",alunos[count].sobrenome[i]);
-                        }
-                    }
-
-                    //impressão da data de nascimento            
-                        printf("Data de nascimento: ");
-                        printf("%d/",alunos[count].datadenascimento.dia);
-                        printf("%d/",alunos[count].datadenascimento.mes);
-                        printf("%d\n",alunos[count].datadenascimento.ano);
-
-                    //impressão do prontuário
-
-                        printf("Prontuario: ");
-                        printf("%d\n",alunos[count].prontuario);
-
-                    //impressão do curso
-
-                        printf("Curso: ");
-                        for(i=0; i<4; i++){
-                            if(alunos[count].curso[i]==0){                                
-                                break;
-                            }
-                            else{
-                                printf("%c",alunos[count].curso[i]);
-                            }
-                        }
-                    }
-                    else{
-                        j++;
-                    }
-                    count++;
+                    filtrados[i]=count;
+                    i++;                    
                 }
-                if(j==contador) printf("\nNenhum aluno foi econtrado com a busca especificada\n");    
+                count++;
+            }
+            if(i==0){
+                printf("Nao foram encontrados resultados com a filtragem inserida");
+            }
+            else{
+                imprimirFiltrados(i,filtrados);
+            }
         break;
 
         case 4:
             printf("Filtragem por prontuario");
             printf("\n------------------------");
             printf("\n\nDigite o prontuario: ");
-            scanf("%d",&filtroProntuario);
-            count=0;
-            j=0;
-            system("cls");
-            printf("Alunos encontrados com a filtragem inserida:\n");
+            scanf("%d",&filtroProntuario);            
+            count = 0;
+            i=0;
             while(count<contador){
-                if(alunos[count].prontuario==filtroProntuario){
-                    printf("\n------------------------------\n");
-
-                    //impressão do nome                
-                    printf("Nome: ");
-                    for(i=0; i<TAMNOME; i++){
-                        if(alunos[count].nome[i]==0){
-                        printf("\n");
-                        break;
-                        }
-                        else{
-                            printf("%c",alunos[count].nome[i]);
-                        }
-                    }
-        
-                    //impressão do sobrenome
-                    printf("Sobrenome: ");
-                    for(i=0; i<TAMSOBRENOME; i++){
-                        if(alunos[count].sobrenome[i]==0){
-                        printf("\n");
-                        break;
-                        }
-                        else{
-                            printf("%c",alunos[count].sobrenome[i]);
-                        }
-                    }
-
-                    //impressão da data de nascimento            
-                        printf("Data de nascimento: ");
-                        printf("%d/",alunos[count].datadenascimento.dia);
-                        printf("%d/",alunos[count].datadenascimento.mes);
-                        printf("%d\n",alunos[count].datadenascimento.ano);
-
-                    //impressão do prontuário
-
-                        printf("Prontuario: ");
-                        printf("%d\n",alunos[count].prontuario);
-
-                    //impressão do curso
-
-                        printf("Curso: ");
-                        for(i=0; i<4; i++){
-                            if(alunos[count].curso[i]==0){                                
-                                break;
-                            }
-                            else{
-                                printf("%c",alunos[count].curso[i]);
-                            }
-                        }
-                    }
-                    else{
-                        j++;
-                    }
-                    count++;
+                if(strstr(alunos[count].prontuario,filtroProntuario)!=NULL){
+                    filtrados[i]=count;
+                    i++;                    
                 }
-                if(j==contador) printf("\nNenhum aluno foi econtrado com a busca especificada\n");    
+                count++;
+            }
+            if(i==0){
+                printf("Nao foram encontrados resultados com a filtragem inserida");
+            }
+            else{
+                imprimirFiltrados(i,filtrados);
+            }
         break;
 
         case 5:
@@ -437,136 +241,44 @@ void filtragens(){
             printf("Digite o mes: ");
             scanf("%d",&filtroMes);
             printf("Digite o ano: ");
-            scanf("%d",&filtroAno);
-            count=0;
-            j=0;
-            system("cls");
-            printf("Alunos encontrados com a filtragem inserida:\n");
+            scanf("%d",&filtroAno);            
+            count = 0;
+            i=0;
             while(count<contador){
-                if(alunos[count].datadenascimento.dia==filtroDia && alunos[count].datadenascimento.mes==filtroMes && alunos[count].datadenascimento.ano==filtroAno ){
-                    printf("\n------------------------------\n");
-
-                    //impressão do nome                
-                    printf("Nome: ");
-                    for(i=0; i<TAMNOME; i++){
-                        if(alunos[count].nome[i]==0){
-                        printf("\n");
-                        break;
-                        }
-                        else{
-                            printf("%c",alunos[count].nome[i]);
-                        }
-                    }
-        
-                    //impressão do sobrenome
-                    printf("Sobrenome: ");
-                    for(i=0; i<TAMSOBRENOME; i++){
-                        if(alunos[count].sobrenome[i]==0){
-                        printf("\n");
-                        break;
-                        }
-                        else{
-                            printf("%c",alunos[count].sobrenome[i]);
-                        }
-                    }
-
-                    //impressão da data de nascimento            
-                        printf("Data de nascimento: ");
-                        printf("%d/",alunos[count].datadenascimento.dia);
-                        printf("%d/",alunos[count].datadenascimento.mes);
-                        printf("%d\n",alunos[count].datadenascimento.ano);
-
-                    //impressão do prontuário
-
-                        printf("Prontuario: ");
-                        printf("%d\n",alunos[count].prontuario);
-
-                    //impressão do curso
-
-                        printf("Curso: ");
-                        for(i=0; i<4; i++){
-                            if(alunos[count].curso[i]==0){                                
-                                break;
-                            }
-                            else{
-                                printf("%c",alunos[count].curso[i]);
-                            }
-                        }
-                    }
-                    else{
-                        j++;
-                    }
-                    count++;
+                if(strstr(alunos[count].datadenascimento.dia,filtroDia)!=NULL && strstr(alunos[count].datadenascimento.mes,filtroMes)!=NULL && strstr(alunos[count].datadenascimento.ano,filtroAno)!=NULL){
+                    filtrados[i]=count;
+                    i++;                    
                 }
-                if(j==contador) printf("\nNenhum aluno foi econtrado com a busca especificada\n");    
+                count++;
+            }
+            if(i==0){
+                printf("Nao foram encontrados resultados com a filtragem inserida");
+            }
+            else{
+                imprimirFiltrados(i,filtrados);
+            }
         break;
 
         case 6:
             printf("Filtragem por curso");
             printf("\n-------------------");
             printf("\n\nDigite o curso: ");
-            scanf("%s",&filtroCurso);                     
-            count=0;
-            j=0;
-            system("cls");
-            printf("Alunos encontrados com a filtragem inserida:\n");
+            scanf("%s",&filtroCurso);                                 
+            count = 0;
+            i=0;
             while(count<contador){
                 if(strstr(alunos[count].curso,filtroCurso)!=NULL){
-                    printf("\n------------------------------\n");
-
-                    //impressão do nome                
-                    printf("Nome: ");
-                    for(i=0; i<TAMNOME; i++){
-                        if(alunos[count].nome[i]==0){
-                        printf("\n");
-                        break;
-                        }
-                        else{
-                            printf("%c",alunos[count].nome[i]);
-                        }
-                    }
-        
-                    //impressão do sobrenome
-                    printf("Sobrenome: ");
-                    for(i=0; i<TAMSOBRENOME; i++){
-                        if(alunos[count].sobrenome[i]==0){
-                        printf("\n");
-                        break;
-                        }
-                        else{
-                            printf("%c",alunos[count].sobrenome[i]);
-                        }
-                    }
-
-                    //impressão da data de nascimento            
-                        printf("Data de nascimento: ");
-                        printf("%d/",alunos[count].datadenascimento.dia);
-                        printf("%d/",alunos[count].datadenascimento.mes);
-                        printf("%d\n",alunos[count].datadenascimento.ano);
-
-                    //impressão do prontuário
-
-                        printf("Prontuario: ");
-                        printf("%d\n",alunos[count].prontuario);
-
-                    //impressão do curso
-
-                        printf("Curso: ");
-                        for(i=0; i<4; i++){
-                            if(alunos[count].curso[i]==0){                                
-                                break;
-                            }
-                            else{
-                                printf("%c",alunos[count].curso[i]);
-                            }
-                        }
-                    }
-                    else{
-                        j++;
-                    }
-                    count++;
+                    filtrados[i]=count;
+                    i++;                    
                 }
-                if(j==contador) printf("\nNenhum aluno foi econtrado com a busca especificada\n");    
+                count++;
+            }
+            if(i==0){
+                printf("Nao foram encontrados resultados com a filtragem inserida");
+            }
+            else{
+                imprimirFiltrados(i,filtrados);
+            }
         break;
     }
 }
@@ -585,7 +297,7 @@ int main() {
                 system("cls");
                 break;
             case 2:
-                imprimir();                
+                imprimirTodos();
                 printf("\n");
                 system("pause");
                 system("cls");
@@ -596,7 +308,7 @@ int main() {
                 system("pause");
                 system("cls");
                 break;
-            case 4:
+            case 4:                
                 printf("excluir\n\n");
                 system("pause");
                 system("cls");
