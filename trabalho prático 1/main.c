@@ -133,7 +133,7 @@ int escolherFiltro(){
     return i;
 }
 
-void filtragens(){
+int filtragens(){
     int filtrados[1000];
     char filtroNome[TAMNOME];
     char filtroSobrenome[TAMSOBRENOME];
@@ -159,10 +159,10 @@ void filtragens(){
                 count++;
             }
             if(i==0){
-                printf("Nao foram encontrados resultados com a filtragem inserida");
+                printf("Nao foram encontrados resultados com a filtragem inserida");                
             }
             else{
-                imprimirFiltrados(i,filtrados);
+                imprimirFiltrados(i,filtrados);                
             }            
 
         break;
@@ -182,11 +182,11 @@ void filtragens(){
                 count++;
             }
             if(i==0){
-                printf("Nao foram encontrados resultados com a filtragem inserida");
+                printf("Nao foram encontrados resultados com a filtragem inserida");                
             }
             else{
-                imprimirFiltrados(i,filtrados);
-            }
+                imprimirFiltrados(i,filtrados);                
+            }        
         break;
 
         case 3:
@@ -204,11 +204,11 @@ void filtragens(){
                 count++;
             }
             if(i==0){
-                printf("Nao foram encontrados resultados com a filtragem inserida");
+                printf("Nao foram encontrados resultados com a filtragem inserida");                
             }
             else{
-                imprimirFiltrados(i,filtrados);
-            }
+                imprimirFiltrados(i,filtrados);                
+            }        
         break;
 
         case 4:
@@ -219,18 +219,18 @@ void filtragens(){
             count = 0;
             i=0;
             while(count<contador){
-                if(strstr(alunos[count].prontuario,filtroProntuario)!=NULL){
+                if(alunos[count].prontuario==filtroProntuario){
                     filtrados[i]=count;
                     i++;                    
                 }
                 count++;
             }
             if(i==0){
-                printf("Nao foram encontrados resultados com a filtragem inserida");
+                printf("Nao foram encontrados resultados com a filtragem inserida");                
             }
             else{
-                imprimirFiltrados(i,filtrados);
-            }
+                imprimirFiltrados(i,filtrados);                
+            }        
         break;
 
         case 5:
@@ -245,18 +245,18 @@ void filtragens(){
             count = 0;
             i=0;
             while(count<contador){
-                if(strstr(alunos[count].datadenascimento.dia,filtroDia)!=NULL && strstr(alunos[count].datadenascimento.mes,filtroMes)!=NULL && strstr(alunos[count].datadenascimento.ano,filtroAno)!=NULL){
+                if(alunos[count].datadenascimento.dia==filtroDia && alunos[count].datadenascimento.mes==filtroMes && alunos[count].datadenascimento.ano==filtroAno){
                     filtrados[i]=count;
                     i++;                    
                 }
                 count++;
             }
             if(i==0){
-                printf("Nao foram encontrados resultados com a filtragem inserida");
+                printf("Nao foram encontrados resultados com a filtragem inserida");                
             }
             else{
-                imprimirFiltrados(i,filtrados);
-            }
+                imprimirFiltrados(i,filtrados);                
+            }        
         break;
 
         case 6:
@@ -274,11 +274,212 @@ void filtragens(){
                 count++;
             }
             if(i==0){
-                printf("Nao foram encontrados resultados com a filtragem inserida");
+                printf("Nao foram encontrados resultados com a filtragem inserida");                
             }
             else{
-                imprimirFiltrados(i,filtrados);
+                imprimirFiltrados(i,filtrados);                
+            }        
+        break;
+    }
+}
+
+void excluir(int TAMANHO, int filtrados[]){
+    int op;
+    printf("\nDeseja realizar a exclusao desses alunos?");
+    printf("\n1 - Sim ");
+    printf("\n2 - Nao ");
+    printf("\n\nInsira o numero correspondente: ");
+    scanf("%d",&op);
+    if(op==1){
+        int i,j,encontrado=-1;
+        if(TAMANHO==contador) contador=0;
+        else{
+            for(i=0;i<TAMANHO;i++){
+                alunos[filtrados[i]] = alunos[contador+1];
             }
+        }    
+        for(i=0;i<contador;i++){
+            if(alunos[i].prontuario==alunos[contador+1].prontuario){
+                for(j=0;j<contador;j++){  
+                    if(encontrado!=-1){
+                        for(j=encontrado+1;j<contador;j++){
+                            if(alunos[j].prontuario!=alunos[contador+1].prontuario){                                
+                                alunos[i] = alunos[j];
+                                break;
+                            }                                      
+                        }
+                    }
+                    if(alunos[j].prontuario!=alunos[contador+1].prontuario){
+                        encontrado=j;
+                        alunos[i] = alunos[j];
+                        break;
+                    }                                      
+                }
+            }
+        }
+        contador=contador-TAMANHO;
+        if(contador<0) contador=0;
+    }    
+}
+
+void filtrarExcluir(){
+    int filtrados[1000];
+    char filtroNome[TAMNOME];
+    char filtroSobrenome[TAMSOBRENOME];
+    char filtroCurso[4];
+    int filtroProntuario,filtroDia,filtroMes,filtroAno;
+    int i = escolherFiltro();
+    int count;
+    switch(i){
+        case 1:            
+            printf("Filtragem por nome e sobrenome");
+            printf("\n------------------------------");
+            printf("\n\nDigite o nome: ");
+            scanf("%s",&filtroNome);
+            printf("Digite o sobrenome: ");
+            scanf("%s",&filtroSobrenome);     
+            count = 0;
+            int i=0;
+            while(count<contador){
+                if(strstr(alunos[count].nome,filtroNome)!=NULL && strstr(alunos[count].sobrenome,filtroSobrenome)!=NULL){
+                    filtrados[i]=count;
+                    i++;                    
+                }
+                count++;
+            }
+            if(i==0){
+                printf("Nao foram encontrados resultados com a filtragem inserida");                
+            }
+            else{
+                imprimirFiltrados(i,filtrados);                
+                printf("\n");
+                excluir(i,filtrados);
+            }            
+            
+        break;
+
+        case 2:
+            printf("Filtragem por nome");
+            printf("\n------------------");
+            printf("\n\nDigite o nome: ");
+            scanf("%s",&filtroNome);                    
+            count = 0;
+            i=0;
+            while(count<contador){
+                if(strstr(alunos[count].nome,filtroNome)!=NULL){
+                    filtrados[i]=count;
+                    i++;                    
+                }
+                count++;
+            }
+            if(i==0){
+                printf("Nao foram encontrados resultados com a filtragem inserida");                
+            }
+            else{
+                imprimirFiltrados(i,filtrados);                
+                printf("\n");
+                excluir(i,filtrados);          
+            }                    
+        break;
+
+        case 3:
+            printf("Filtragem por sobrenome");
+            printf("\n-----------------------");
+            printf("\n\nDigite o sobrenome: ");
+            scanf("%s",&filtroSobrenome);            
+            count = 0;
+            i=0;
+            while(count<contador){
+                if(strstr(alunos[count].sobrenome,filtroSobrenome)!=NULL){
+                    filtrados[i]=count;
+                    i++;                    
+                }
+                count++;
+            }
+            if(i==0){
+                printf("Nao foram encontrados resultados com a filtragem inserida");                
+            }
+            else{
+                imprimirFiltrados(i,filtrados);                
+                printf("\n");
+                excluir(i,filtrados);          
+            }                    
+        break;
+
+        case 4:
+            printf("Filtragem por prontuario");
+            printf("\n------------------------");
+            printf("\n\nDigite o prontuario: ");
+            scanf("%d",&filtroProntuario);            
+            count = 0;
+            i=0;
+            while(count<contador){
+                if(alunos[count].prontuario==filtroProntuario){
+                    filtrados[i]=count;
+                    i++;                    
+                }
+                count++;
+            }
+            if(i==0){
+                printf("Nao foram encontrados resultados com a filtragem inserida");                
+            }
+            else{
+                imprimirFiltrados(i,filtrados);                
+                printf("\n");
+                excluir(i,filtrados);                   
+            }                    
+        break;
+
+        case 5:
+            printf("Filtragem por data de nascimento");
+            printf("\n--------------------------------");
+            printf("\n\nDigite o dia: ");
+            scanf("%d",&filtroDia);
+            printf("Digite o mes: ");
+            scanf("%d",&filtroMes);
+            printf("Digite o ano: ");
+            scanf("%d",&filtroAno);            
+            count = 0;
+            i=0;
+            while(count<contador){
+                if(alunos[count].datadenascimento.dia==filtroDia && alunos[count].datadenascimento.mes==filtroMes && alunos[count].datadenascimento.ano==filtroAno){
+                    filtrados[i]=count;
+                    i++;                    
+                }
+                count++;
+            }
+            if(i==0){
+                printf("Nao foram encontrados resultados com a filtragem inserida");                
+            }
+            else{
+                imprimirFiltrados(i,filtrados);                
+                printf("\n");
+                excluir(i,filtrados);          
+            }                    
+        break;
+
+        case 6:
+            printf("Filtragem por curso");
+            printf("\n-------------------");
+            printf("\n\nDigite o curso: ");
+            scanf("%s",&filtroCurso);                                 
+            count = 0;
+            i=0;
+            while(count<contador){
+                if(strstr(alunos[count].curso,filtroCurso)!=NULL){
+                    filtrados[i]=count;
+                    i++;                    
+                }
+                count++;
+            }
+            if(i==0){
+                printf("Nao foram encontrados resultados com a filtragem inserida");                
+            }
+            else{
+                imprimirFiltrados(i,filtrados);                
+                printf("\n");
+                excluir(i,filtrados);          
+            }                    
         break;
     }
 }
@@ -309,12 +510,14 @@ int main() {
                 system("cls");
                 break;
             case 4:                
-                printf("excluir\n\n");
+                filtrarExcluir();
+                printf("\n");
                 system("pause");
                 system("cls");
                 break;
             case 5:
                 printf("ordenar\n\n");
+                printf("%d",contador);
                 system("pause");
                 system("cls");
                 break;            
