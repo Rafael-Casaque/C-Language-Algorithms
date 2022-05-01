@@ -81,7 +81,7 @@ void imprimirString(char string[]){
 
 void imprimirTodos(){
     if(contador==0){
-        printf("Nao ha alunos cadastrados!");
+        printf("\nNao ha alunos cadastrados!");
     }
     else{
         int count = 0;
@@ -297,28 +297,20 @@ void excluir(int TAMANHO, int filtrados[]){
             for(i=0;i<TAMANHO;i++){
                 alunos[filtrados[i]] = alunos[contador+1];
             }
-        }    
-        for(i=0;i<contador;i++){
-            if(alunos[i].prontuario==alunos[contador+1].prontuario){
-                for(j=0;j<contador;j++){  
-                    if(encontrado!=-1){
-                        for(j=encontrado+1;j<contador;j++){
-                            if(alunos[j].prontuario!=alunos[contador+1].prontuario){                                
-                                alunos[i] = alunos[j];
-                                break;
-                            }                                      
+            for(i=contador;i>=0;i--){            
+                for(j=contador;j>=0;j--){
+                    if(alunos[i].nome[0]==NULL){                                
+                        if(alunos[j].nome[0]!=NULL){
+                            alunos[contador+1]=alunos[j];
+                            alunos[j]=alunos[i];
+                            alunos[i]=alunos[contador+1];                            
+                            break;
                         }
                     }
-                    if(alunos[j].prontuario!=alunos[contador+1].prontuario){
-                        encontrado=j;
-                        alunos[i] = alunos[j];
-                        break;
-                    }                                      
-                }
-            }
-        }
-        contador=contador-TAMANHO;
-        if(contador<0) contador=0;
+                }            
+            }  
+            contador-=TAMANHO;              
+        }            
     }    
 }
 
