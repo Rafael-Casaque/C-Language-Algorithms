@@ -81,7 +81,7 @@ void imprimirString(char string[]){
 
 void imprimirTodos(){
     if(contador==0){
-        printf("\nNao ha alunos cadastrados!");
+        printf("Nao ha alunos cadastrados!\n");
     }
     else{
         int count = 0;
@@ -476,6 +476,51 @@ void filtrarExcluir(){
     }
 }
 
+void trocar(aluno alunos[], aluno alunos_menor[]) {
+    alunos[contador+2] = *alunos;
+    *alunos = *alunos_menor;
+    *alunos_menor = alunos[contador+2];
+}
+
+int menor_elemento( aluno alunos[], int n, int primeiro) {
+    int i, menor = primeiro;
+    for (i = primeiro + 1; i < n; i++) {
+    if (alunos[i].prontuario < alunos[menor].prontuario)
+    menor = i;
+    }
+    return menor;
+}
+
+int ordenar_selecao(aluno alunos[], int n) {
+    int i, menor;
+    for (i = 0; i < n; i++) {
+    menor = menor_elemento(alunos, n, i);
+    trocar(&alunos[i], &alunos[menor]);
+    }
+}
+
+int escolherOrdem(){
+    system("cls");
+    int i;    
+    printf("1 - ordenar por nome e sobrenome");
+    printf("\n2 - ordenar por nome");    
+    printf("\n3 - ordenar por prontuario");
+    printf("\n4 - ordenar por data de nascimento");
+    printf("\n5 - ordenar por curso");
+    printf("\n\nEscolha a opcao desejada de filtragem: ");
+    scanf("%d",&i);
+    system("cls");
+    return i;
+}
+
+void ordenar(){
+    int i = escolherOrdem();
+    switch(i){
+        case 3:
+            ordenar_selecao(alunos,contador);
+    }
+}
+
 int main() {
     int i;    
     while(i!=0){
@@ -508,8 +553,7 @@ int main() {
                 system("cls");
                 break;
             case 5:
-                printf("ordenar\n\n");
-                printf("%d",contador);
+                ordenar();
                 system("pause");
                 system("cls");
                 break;            
