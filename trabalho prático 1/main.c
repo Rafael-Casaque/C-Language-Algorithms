@@ -33,8 +33,11 @@ aluno alunos[1000];
 int contador = 0;
 int menorNome = 50;
 int menorSobrenome = 50;
+int menorCurso = 4;
 int vetorNome[1000];
+int vetorDias[1000];
 int vetorSobrenome[1000];
+int vetorCurso[1000];
 
 //Criação das funções
 
@@ -72,6 +75,11 @@ void cadastro(){
     scanf("%d",&alunos[contador].prontuario);
     printf("Digite o curso do aluno: ");    
     scanf("%s",&alunos[contador].curso);
+    for(i=0; i<3; i++){
+        if(alunos[contador].curso[i]==0){
+            if(i<menorCurso) menorCurso=i;
+        }
+    }
     printf("Digite o dia de nascimento do aluno: ");    
     scanf("%d",&alunos[contador].datadenascimento.dia);
     printf("Digite o mes de nascimento do aluno: ");    
@@ -513,6 +521,40 @@ int ordenar_selecao(aluno alunos[], int n) {
     }
 }
 
+int menor_elemento2( int vetorNome[], int n, int primeiro) {
+    int i, menor = primeiro;
+    for (i = primeiro + 1; i < n; i++) {
+    if (vetorNome[i] < vetorNome[menor])
+    menor = i;
+    }
+    return menor;
+}
+
+int ordenar_selecao2(int vetorNome[], aluno alunos[], int n) {
+    int i, menor;
+    for (i = 0; i < n; i++) {
+    menor = menor_elemento2(vetorNome, n, i);
+    trocar(&alunos[i], &alunos[menor]);
+    }
+}
+
+int menor_elemento3( int vetorDias[], int n, int primeiro) {
+    int i, menor = primeiro;
+    for (i = primeiro + 1; i < n; i++) {
+    if (vetorDias[i] < vetorDias[menor])
+    menor = i;
+    }
+    return menor;
+}
+
+int ordenar_selecao3(int vetorDias[], aluno alunos[], int n) {
+    int i, menor;
+    for (i = 0; i < n; i++) {
+    menor = menor_elemento2(vetorDias, n, i);
+    trocar(&alunos[i], &alunos[menor]);
+    }
+}
+
 int escolherOrdem(){
     system("cls");
     int i;    
@@ -535,32 +577,136 @@ int conversor(char letra){
     }        
 }
 
-void ordenar(){
-    int i = escolherOrdem();
-    int j,k,soma=0;
-    switch(i){
+int conversorData(aluno alunos[], int i){
+    int fev,dias=0;
+    if(alunos[i].datadenascimento.ano%4==0) fev = 1;                            
+    else fev = 0;                        
+    dias += 365*alunos[i].datadenascimento.ano;        
+    dias += alunos[i].datadenascimento.dia;        
+    switch(alunos[i].datadenascimento.mes){
         case 1:
-            for(j=0;j<contador;j++){
+            dias += 0;
+        break;
+        case 2:
+            dias += 31;
+        break;
+        case 3:
+            dias += 31 + 28 + fev;
+        break;
+        case 4:
+            dias += 31 + 28 + fev + 31;
+        break;
+        case 5:
+            dias += 31 + 28 + fev + 31 + 30;
+        break;
+        case 6:
+            dias += 31 + 28 + fev + 31 + 30 + 31;
+        break;
+        case 7:
+            dias += 31 + 28 + fev + 31 + 30 + 31 + 30;
+        break;
+        case 8:
+            dias += 31 + 28 + fev + 31 + 30 + 31 + 30 + 31;
+        break;
+        case 9:
+            dias += 31 + 28 + fev + 31 + 30 + 31 + 30 + 31 + 31;
+        break;
+        case 10:
+            dias += 31 + 28 + fev + 31 + 30 + 31 + 30 + 31 + 31 + 30;
+        break;
+        case 11:
+            dias += 31 + 28 + fev + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31;
+        break;
+        case 12:
+            dias += 31 + 28 + fev + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30;
+        break;
+    }
+    return dias;
+}
+
+void ordenarNome(){
+    int j,k,soma=0;
+    for(j=0;j<contador;j++){
                 for(k=0;k<menorNome;k++){                
                     if(k==0){
-                        soma += (conversor(alunos[j].nome[k])*100);        
+                        soma += (conversor(alunos[j].nome[k])*1000);        
                     }
                     else{
-                        soma += (conversor(alunos[j].nome[k])*100/(4*k));
-                    }                                               
+                        soma += (conversor(alunos[j].nome[k])*(1000/(50*k)));
+                    }                                        
                 }                               
-                vetorNome[j] = soma;                  
-                soma = 0;                            
-            }
+                vetorNome[j] = soma;                     
+                soma = 0;                                
+            }            
+            ordenar_selecao2(vetorNome,alunos,contador);                        
+}
+
+void ordenarSobrenome(){
+    int j,k,soma=0;
+    for(j=0;j<contador;j++){
+                for(k=0;k<menorSobrenome;k++){                
+                    if(k==0){
+                        soma += (conversor(alunos[j].sobrenome[k])*1000);        
+                    }
+                    else{
+                        soma += (conversor(alunos[j].sobrenome[k])*(1000/(50*k)));
+                    }                                        
+                }                               
+                vetorSobrenome[j] = soma;                     
+                soma = 0;                                
+            }            
+            ordenar_selecao2(vetorSobrenome,alunos,contador);                        
+}
+
+void ordenarCurso(){
+    int j,k,soma=0;
+    for(j=0;j<contador;j++){
+                for(k=0;k<menorCurso;k++){                
+                    if(k==0){
+                        soma += (conversor(alunos[j].curso[k])*1000);        
+                    }
+                    else{
+                        soma += (conversor(alunos[j].curso[k])*(1000/(50*k)));
+                    }                                        
+                }                               
+                vetorCurso[j] = soma;                     
+                soma = 0;                                
+            }            
+            ordenar_selecao2(vetorCurso,alunos,contador);                        
+}
+
+void ordenarAniversario(){    
+    int i;
+    for(i=0;i<contador;i++){
+        vetorDias[i] = conversorData(alunos,i);
+    }
+    ordenar_selecao3(vetorDias,alunos,contador);
+}
+
+void ordenar(){
+    int i = escolherOrdem();    
+    int j;
+    switch(i){
+        case 1:
+            for(j=0;j<contador;j++) ordenarNome();
+        break;
+        case 2:
+            for(j=0;j<contador;j++) ordenarSobrenome();
         break;
         case 3:
             ordenar_selecao(alunos,contador);
         break;
-    }
+        case 4:
+            ordenarAniversario();
+        break;
+        case 5:
+            for(j=0;j<contador;j++) ordenarCurso();
+        break;
+    }    
 }
 
 int main() {
-    int i;    
+    int i,j;    
     while(i!=0){
         i = menu();        
         system("cls");
@@ -573,9 +719,7 @@ int main() {
                 system("cls");
                 break;
             case 2:
-                imprimirTodos();
-                printf("\n\n%d",vetorNome[0]);
-                printf("\n\n%d",vetorNome[1]);
+                imprimirTodos();                                                                
                 printf("\n");
                 system("pause");
                 system("cls");
