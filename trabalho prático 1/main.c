@@ -27,11 +27,14 @@ typedef struct {
  char curso [4];
 } aluno;
 
-aluno alunos[1000]; 
-
 //Variáveis globais
 
+aluno alunos[1000]; 
 int contador = 0;
+int menorNome = 50;
+int menorSobrenome = 50;
+int vetorNome[1000];
+int vetorSobrenome[1000];
 
 //Criação das funções
 
@@ -50,10 +53,21 @@ int menu(){
 }
 
 void cadastro(){    
+    int i;
     printf("Digite o nome do aluno: ");    
-    scanf("%s",&alunos[contador].nome);    
+    scanf("%s",&alunos[contador].nome);        
+    for(i=0; i<TAMNOME; i++){
+        if(alunos[contador].nome[i]==0){
+            if(i<menorNome) menorNome=i;
+        }
+    }
     printf("Digite o sobrenome do aluno: ");    
     scanf("%s",&alunos[contador].sobrenome);    
+    for(i=0; i<TAMNOME; i++){
+        if(alunos[contador].sobrenome[i]==0){
+            if(i<menorSobrenome) menorSobrenome=i;
+        }
+    }
     printf("Digite o prontuario do aluno: ");    
     scanf("%d",&alunos[contador].prontuario);
     printf("Digite o curso do aluno: ");    
@@ -502,8 +516,8 @@ int ordenar_selecao(aluno alunos[], int n) {
 int escolherOrdem(){
     system("cls");
     int i;    
-    printf("1 - ordenar por nome e sobrenome");
-    printf("\n2 - ordenar por nome");    
+    printf("1 - ordenar por nome");
+    printf("\n2 - ordenar por sobrenome");    
     printf("\n3 - ordenar por prontuario");
     printf("\n4 - ordenar por data de nascimento");
     printf("\n5 - ordenar por curso");
@@ -513,11 +527,35 @@ int escolherOrdem(){
     return i;
 }
 
+int conversor(char letra){    
+    char letras[] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+    int i;
+    for(i=0;i<25;i++){
+        if(letra==letras[i]) return i+1;
+    }        
+}
+
 void ordenar(){
     int i = escolherOrdem();
+    int j,k,soma=0;
     switch(i){
+        case 1:
+            for(j=0;j<contador;j++){
+                for(k=0;k<menorNome;k++){                
+                    if(k==0){
+                        soma += (conversor(alunos[j].nome[k])*100);        
+                    }
+                    else{
+                        soma += (conversor(alunos[j].nome[k])*100/(4*k));
+                    }                                               
+                }                               
+                vetorNome[j] = soma;                  
+                soma = 0;                            
+            }
+        break;
         case 3:
             ordenar_selecao(alunos,contador);
+        break;
     }
 }
 
@@ -536,6 +574,8 @@ int main() {
                 break;
             case 2:
                 imprimirTodos();
+                printf("\n\n%d",vetorNome[0]);
+                printf("\n\n%d",vetorNome[1]);
                 printf("\n");
                 system("pause");
                 system("cls");
@@ -553,7 +593,7 @@ int main() {
                 system("cls");
                 break;
             case 5:
-                ordenar();
+                ordenar();                
                 system("pause");
                 system("cls");
                 break;            
